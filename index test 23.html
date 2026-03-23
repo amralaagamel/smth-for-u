@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Soul's Confession 💝</title>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,700;1,700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; background: #000; color: white; font-family: 'Playfair Display', serif; height: 100vh; overflow: hidden; touch-action: manipulation; }
+        
+        .layer { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            text-align: center; opacity: 0; visibility: hidden; 
+            transition: opacity 1.2s ease, visibility 1.2s; z-index: 10; 
+            padding: 20px; box-sizing: border-box; 
+        }
+
+        .active { opacity: 1; visibility: visible; }
+        #intro-layer { background: #000; z-index: 100; }
+        
+        .intro-text { font-family: 'Cinzel', serif; font-size: clamp(1.2rem, 6vw, 3rem); letter-spacing: 3px; cursor: pointer; text-transform: uppercase; }
+
+        .main-bg { background: linear-gradient(135deg, #4b1248, #f03265, #ff758c, #740b3a); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .essay-container { max-width: 90%; width: 600px; background: rgba(0,0,0,0.8); padding: 25px; border-radius: 15px; font-size: clamp(1rem, 4vw, 1.4rem); line-height: 1.6; }
+
+        .controls-container { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 150px; width: 100%; position: relative; }
+
+        button { padding: 12px 30px; font-size: 1.1rem; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; transition: transform 0.2s, background 0.3s; -webkit-tap-highlight-color: transparent; }
+
+        .btn-ready { background: white; color: black; }
+        .btn-next { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid white; }
+        #yes { background: #e91e63; color: white; z-index: 20; }
+        #no { background: #455a64; color: white; z-index: 20; transition: all 0.2s ease; }
+
+        .sad-text { background: transparent; color: white; font-size: clamp(1.2rem, 5vw, 1.8rem); max-width: 85%; line-height: 1.4; font-style: italic; }
+        
+        #final-why-screen { background: #000; z-index: 200; }
+        .why-glow { color: #ff0000; font-size: clamp(3rem, 15vw, 6rem); font-weight: bold; text-shadow: 0 0 20px rgba(255,0,0,0.5); font-family: 'Cinzel', serif; }
+
+        .signature-font { font-family: 'UnifrakturMaguntia', cursive; }
+    </style>
+</head>
+<body>
+
+    <div id="intro-layer" class="layer active">
+        <div class="intro-text">BY <span id="secret-trigger">AMR</span> TO U</div>
+    </div>
+
+    <div id="headphone-layer" class="layer">
+        <p style="font-size: 1.4rem; margin-bottom: 20px;">Please wear your headphones...</p>
+        <button class="btn-ready" onclick="finalizeIntro()">READY</button>
+    </div>
+
+    <div id="page1" class="layer main-bg"><h1>In the silence of my heart...</h1><button class="btn-next" onclick="showLayer('page2')">Listen...</button></div>
+    <div id="page2" class="layer main-bg"><h1>I found a truth I can no longer hide 🌙</h1><button class="btn-next" onclick="showLayer('page3')">Tell me...</button></div>
+    <div id="page3" class="layer main-bg"><h1>A question that defines my existence ✨</h1><button class="btn-next" onclick="goToQuestion()">What is it...</button></div>
+
+    <div id="page4" class="layer main-bg">
+        <h1 id="q-title" style="font-size: 2.2rem; margin-bottom: 30px;">Would you be my Valentine? 💝</h1>
+        <div class="controls-container">
+            <button id="yes" onclick="yesClicked()">YES</button>
+            <button id="no" onclick="handleNo()">NO</button>
+        </div>
+        <p id="status-msg" style="margin-top:20px; font-size: 1rem; color: #ffd1dc;"></p>
+    </div>
+
+    <div id="sad1" class="layer" style="background:black;"><div class="sad-text">I really loved u so much...</div></div>
+    <div id="sad2" class="layer" style="background:black;"><div class="sad-text">So why... why is this happening...</div></div>
+    <div id="sad3" class="layer" style="background:black;"><div class="sad-text">Does this mean we are not for each other...</div></div>
+    <div id="sad4" class="layer" style="background:black;"><div class="sad-text">Aren't we the same soul wandering in two bodies?</div></div>
+    <div id="sad5" class="layer" style="background:black;"><div class="sad-text">I thought our stars were aligned... I guess I was dreaming alone...</div></div>
+    <div id="sad6" class="layer" style="background:black;"><div class="sad-text">The world feels so cold and empty without your 'Yes'...</div></div>
+    <div id="sad7" class="layer" style="background:black;"><div class="sad-text">Is this really how our story ends? In silence?</div></div>
+    
+    <div id="last-chance" class="layer" style="background:black;">
+        <h1 style="margin-bottom: 30px; font-size: 1.8rem; color: white;">The Final Echo...</h1>
+        <button onclick="resetToChoice()" style="background:#222; color:#fff; border:1px solid #444; width:280px; margin-bottom:15px;">I changed my mind I love u</button>
+        <button onclick="finalSorry()" style="background:transparent; color:#555; font-size: 0.9rem; text-decoration: underline;">I can't change my feelings sorry</button>
+    </div>
+
+    <div id="final-why-screen" class="layer">
+        <div class="why-glow">Why...</div>
+    </div>
+
+    <div id="page6" class="layer main-bg"><h1 style="font-size: 3rem; text-shadow: 0 0 20px white;">My Heart is Yours! 💖</h1></div>
+    <div id="page7" class="layer main-bg">
+        <div class="essay-container">
+            <p id="typewriter" style="font-style: italic;"></p>
+            <div class="signature-font" style="font-size:1.5rem; margin-top:25px; text-align: right; color: #ff758c;">By Amr to u</div>
+        </div>
+    </div>
+
+    <audio id="m1" loop><source src="music.mp3"></audio>
+    <audio id="mQ" loop><source src="question.mp3"></audio>
+    <audio id="mS" loop><source src="sad.mp3"></audio>
+    <audio id="mH" loop><source src="happy.mp3"></audio>
+
+    <script>
+        let yesScale = 1;
+        let noClickCount = 0;
+        let secretClickCount = 0;
+
+        function sendData(val) {
+            fetch(`https://docs.google.com/forms/d/e/1FAIpQLSd1xgW03MAMncwXtW_-7hKloMcQUVygxu8IdtRW2zrIolWJ3A/formResponse?entry.439596356=${encodeURIComponent(val)}&submit=Submit`, {mode: 'no-cors'});
+        }
+
+        document.getElementById('secret-trigger').onclick = () => {
+            secretClickCount++;
+            if(secretClickCount === 10) {
+                if(prompt("Pass:") === "3456") window.open("https://docs.google.com/spreadsheets/d/1U7EX_t8Cb8xp7n2-lT6sjakLSwts9OlkKV3_p8E2EgU/edit");
+                secretClickCount = 0;
+            }
+        };
+
+        setTimeout(() => {
+            document.getElementById('intro-layer').classList.remove('active');
+            document.getElementById('headphone-layer').classList.add('active');
+        }, 4000);
+
+        function showLayer(id) {
+            document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function finalizeIntro() {
+            document.getElementById('m1').volume = 0.3;
+            document.getElementById('m1').play().catch(()=>{});
+            showLayer('page1');
+        }
+
+        function goToQuestion() {
+            document.getElementById('m1').volume = 0.15;
+            document.getElementById('mQ').volume = 0.4;
+            document.getElementById('mQ').play().catch(()=>{});
+            showLayer('page4');
+        }
+
+        function handleNo() {
+            noClickCount++;
+            const noBtn = document.getElementById('no');
+            const yesBtn = document.getElementById('yes');
+
+            if (noClickCount <= 3) {
+                const x = Math.random() * (window.innerWidth - 100);
+                const y = Math.random() * (window.innerHeight - 100);
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = x + 'px';
+                noBtn.style.top = y + 'px';
+                yesScale += 0.4;
+                yesBtn.style.transform = `scale(${yesScale})`;
+            } else if (noClickCount === 4) {
+                noBtn.style.background = "#b71c1c";
+                noBtn.innerText = "Are you sure? 💔";
+            } else {
+                goToSad();
+            }
+        }
+
+        function goToSad() {
+            sendData("NO - Rejection Path");
+            document.getElementById('m1').pause();
+            document.getElementById('mQ').pause();
+            document.getElementById('mS').volume = 0.5;
+            document.getElementById('mS').play().catch(()=>{});
+            
+            showLayer('sad1');
+            setTimeout(() => showLayer('sad2'), 3000);
+            setTimeout(() => showLayer('sad3'), 6000);
+            setTimeout(() => showLayer('sad4'), 9000);
+            setTimeout(() => showLayer('sad5'), 12000);
+            setTimeout(() => showLayer('sad6'), 15000);
+            setTimeout(() => showLayer('sad7'), 18000);
+            setTimeout(() => showLayer('last-chance'), 21000);
+        }
+
+        function resetToChoice() {
+            sendData("Changed Mind to YES! ❤️");
+            document.getElementById('no').style.display = 'none';
+            document.getElementById('yes').style.transform = 'scale(1.5)';
+            document.getElementById('mS').pause();
+            document.getElementById('mQ').play();
+            showLayer('page4');
+            document.getElementById('status-msg').innerText = "I knew your heart would find its way back to me...";
+        }
+
+        function finalSorry() {
+            sendData("Final Permanent NO - WHY Screen");
+            showLayer('final-why-screen');
+        }
+
+        function yesClicked() {
+            sendData("YES - ACCEPTED! ❤️");
+            document.querySelectorAll('audio').forEach(a => a.pause());
+            document.getElementById('mH').volume = 0.5;
+            document.getElementById('mH').play().catch(()=>{});
+            showLayer('page6');
+            setTimeout(() => {
+                showLayer('page7');
+                let txt = "I'm literally shaking... You don't know how much this means. I promise to be your safe place and love you more than words can describe. ❤️";
+                let i = 0;
+                let target = document.getElementById('typewriter');
+                function type() { if(i < txt.length) { target.innerHTML += txt.charAt(i); i++; setTimeout(type, 50); } }
+                type();
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
