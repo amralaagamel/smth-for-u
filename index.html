@@ -4,72 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A Soul's Confession</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=UnifrakturMaguntia&family=Open+Sans:wght@400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; padding: 0; background: #000; color: white; font-family: 'Playfair Display', serif; height: 100vh; overflow: hidden; touch-action: manipulation; }
         
+        /* تحسين خلفية القلوب */
         #hearts-bg { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            pointer-events: none; z-index: 15; opacity: 1; transition: opacity 1s;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            pointer-events: none; /* عشان القلوب متمنعش الضغط على الزراير */
+            z-index: 15; 
+            transition: opacity 1s; 
         }
+
         .heart-css { 
-            position: absolute; width: 10px; height: 10px; 
-            background: #fff; box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
-            transform: rotate(45deg); animation: fall linear infinite;
+            position: absolute; 
+            width: 10px; 
+            height: 10px; 
+            background: #fff; 
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.9); 
+            transform: rotate(45deg); 
+            animation: fall linear infinite; 
         }
-        .heart-css::before, .heart-css::after { 
-            content: ''; position: absolute; width: 100%; height: 100%; 
-            background: inherit; border-radius: 50%; 
-        }
+        .heart-css::before, .heart-css::after { content: ''; position: absolute; width: 100%; height: 100%; background: inherit; border-radius: 50%; }
         .heart-css::before { top: -50%; left: 0; }
         .heart-css::after { left: -50%; top: 0; }
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(45deg) scale(0.5); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translateY(110vh) rotate(45deg) scale(1.2); opacity: 0; }
+
+        @keyframes fall { 
+            0% { transform: translateY(-10vh) rotate(45deg) scale(0.5); opacity: 0; } 
+            20% { opacity: 0.8; } 
+            100% { transform: translateY(110vh) rotate(45deg) scale(1.2); opacity: 0; } 
         }
 
-        .layer { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            text-align: center; opacity: 0; visibility: hidden; 
-            transition: opacity 1.2s ease-in-out; z-index: 20; 
-            padding: 20px; box-sizing: border-box; 
-        }
-
+        .layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; opacity: 0; visibility: hidden; transition: opacity 1.2s ease-in-out; z-index: 20; padding: 20px; box-sizing: border-box; }
         .active { opacity: 1; visibility: visible; }
-        #intro-layer { background: #000; z-index: 100; }
-        .intro-text { font-family: 'Cinzel', serif; font-size: clamp(1rem, 5vw, 2.5rem); letter-spacing: 8px; }
-
+        
         .main-bg { background: linear-gradient(135deg, #1a0518, #4b1248, #740b3a, #000); background-size: 400% 400%; animation: gradientBG 15s ease infinite; z-index: 10; }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .sad-text { font-size: clamp(1.1rem, 5vw, 1.8rem); font-style: italic; max-width: 80%; }
-        .essay-container { max-width: 90%; width: 650px; background: rgba(0,0,0,0.85); padding: 35px; border-radius: 15px; position: relative; }
-
-        /* تعديلات الزراير */
-        button { 
-            padding: 12px 35px; font-size: 1rem; border-radius: 50px; border: none; 
-            cursor: pointer; font-weight: bold; transition: transform 0.3s ease, background 0.4s; 
-            z-index: 50;
-        }
-        /* تأثير الماوس يكبر ويصغر */
-        button:hover { transform: scale(1.15); }
-
+        button { padding: 12px 35px; font-size: 1rem; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; transition: transform 0.3s ease, background 0.4s; z-index: 50; position: relative; }
         .btn-ready { background: white; color: black; }
         .btn-next { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.5); }
-        #yes { background: #e91e63; color: white; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #yes { background: #e91e63; color: white; }
         #no { background: #455a64; color: white; }
-
-        .signature-font { font-family: 'UnifrakturMaguntia', serif; font-size: 1.1rem; color: #ff758c; position: absolute; bottom: 15px; right: 25px; }
+        .btn-sad-final { background: #222; color: #666; font-size: 0.8rem; margin-top: 15px; border: 1px solid #444; width: 250px; }
     </style>
 </head>
 <body>
 
     <div id="hearts-bg"></div>
 
-    <div id="intro-layer" class="layer active"><div class="intro-text">A WHISPER FROM MY SOUL</div><p style="font-size: 0.7rem; margin-top: 20px; letter-spacing: 2px;">BY AMR</p></div>
-    <div id="headphone-layer" class="layer"><p style="font-size: 1.3rem;">Please wear your headphones</p><button class="btn-ready" onclick="finalizeIntro()">I AM READY</button></div>
+    <div id="intro-layer" class="layer active">
+        <div style="font-family: 'Cinzel', serif; font-size: 2.2rem; letter-spacing: 6px;">A WHISPER FROM MY SOUL</div>
+        <p style="font-size: 0.7rem; margin-top: 20px; letter-spacing: 2px;">BY <span id="secret-trigger" onclick="handleSecretClick()" style="cursor: pointer;">AMR</span></p>
+        <button class="btn-ready" style="margin-top: 30px;" onclick="showLayer('headphone-layer')">ENTER</button>
+    </div>
+
+    <div id="headphone-layer" class="layer">
+        <p style="font-size: 1.3rem;">Please wear your headphones</p>
+        <button class="btn-ready" onclick="finalizeIntro()">I AM READY</button>
+    </div>
 
     <div id="page1" class="layer main-bg"><h1>In the silence of my heart</h1><button class="btn-next" onclick="showLayer('page2')">Listen</button></div>
     <div id="page2" class="layer main-bg"><h1>I found a truth I can no longer hide</h1><button class="btn-next" onclick="showLayer('page3')">Tell me</button></div>
@@ -83,76 +80,86 @@
         </div>
     </div>
 
-    <div id="sad1" class="layer" style="background:black;"><div class="sad-text">I really loved u so much</div></div>
-    <div id="sad2" class="layer" style="background:black;"><div class="sad-text">So why why is this happening</div></div>
-    <div id="sad3" class="layer" style="background:black;"><div class="sad-text">Does this mean we are not for each other</div></div>
-    <div id="sad4" class="layer" style="background:black;"><div class="sad-text">Arent we the same soul wandering in two bodies</div></div>
-    <div id="sad5" class="layer" style="background:black;"><div class="sad-text">I thought our stars were aligned I guess I was dreaming alone</div></div>
-    <div id="sad6" class="layer" style="background:black;"><div class="sad-text">The world feels so cold and empty without your yes</div></div>
-    <div id="sad7" class="layer" style="background:black;"><div class="sad-text">Is this really how our story ends In silence</div></div>
+    <div id="sad1" class="layer" style="background:black;"><div>I really loved u so much</div></div>
+    <div id="sad2" class="layer" style="background:black;"><div>So why why is this happening</div></div>
+    <div id="sad3" class="layer" style="background:black;"><div>Does this mean we are not for each other</div></div>
+    <div id="sad4" class="layer" style="background:black;"><div>Arent we the same soul wandering in two bodies</div></div>
+    <div id="sad5" class="layer" style="background:black;"><div>I thought our stars were aligned I guess I was dreaming alone</div></div>
+    <div id="sad6" class="layer" style="background:black;"><div>The world feels so cold and empty without your yes</div></div>
+    <div id="sad7" class="layer" style="background:black;"><div>Is this really how our story ends In silence</div></div>
     
     <div id="last-chance" class="layer" style="background:black;">
-        <button onclick="resetToChoice()" style="background:#222; color:#fff; border:1px solid #444; width:280px; margin-bottom:15px;">I changed my mind I love u</button>
-        <button onclick="showLayer('final-why-screen')" style="background:transparent; color:#555; text-decoration: underline;">I cant change my feelings sorry</button>
+        <button onclick="resetToChoice()" style="background:#fff; color:#000; width:300px; margin-bottom: 10px;">I changed my mind I love u</button>
+        <button onclick="showLayer('final-why')" class="btn-sad-final">i don't have feelings for u sry</button>
     </div>
 
-    <div id="final-why-screen" class="layer" style="background:black;"><h1 style="color:red; font-size: 5rem;">Why</h1></div>
+    <div id="final-why" class="layer" style="background:black;"><h1 style="color:red; font-size: 4rem;">Why?</h1></div>
 
     <div id="yes1" class="layer main-bg"><h1>IS THAT REAL</h1></div>
-    <div id="yes2" class="layer main-bg"><h1>OMG FR</h1></div>
-    <div id="yes3" class="layer main-bg"><h1>I LOVE U TOO</h1></div>
-
     <div id="page-final" class="layer main-bg">
-        <div class="essay-container">
-            <p id="typewriter" style="padding-bottom: 20px;"></p>
-            <div class="signature-font">Amr</div>
+        <div style="max-width: 90%; width: 650px; background: rgba(0,0,0,0.85); padding: 35px; border-radius: 15px; position: relative;">
+            <p id="typewriter" style="padding-bottom: 20px; line-height: 1.6;"></p>
+            <div style="font-family: 'Cinzel', serif; font-size: 0.9rem; color: #ff758c; position: absolute; bottom: 15px; right: 25px;">Amr</div>
         </div>
     </div>
 
-    <audio id="m1" loop><source src="music.mp3"></audio>
-    <audio id="mQ" loop><source src="question.mp3"></audio>
-    <audio id="mS" loop><source src="sad.mp3"></audio>
-    <audio id="mH" loop><source src="happy.mp3"></audio>
+    <audio id="m1" loop preload="auto"><source src="music.mp3"></audio>
+    <audio id="mQ" loop preload="auto"><source src="question.mp3"></audio>
+    <audio id="mS" loop preload="auto"><source src="sad.mp3"></audio>
+    <audio id="mH" loop preload="auto"><source src="happy.mp3"></audio>
 
     <script>
-        // وظيفة لإيقاف كل الأغاني
-        function stopAllMusic() {
-            document.querySelectorAll('audio').forEach(a => {
-                a.pause();
-                a.currentTime = 0;
+        let secretClicks = 0;
+        const SECRET_PASS = "3456";
+        const GOOGLE_DOCS_URL = "https://docs.google.com/spreadsheets/d/1U7EX_t8Cb8xp7n2-lT6sjakLSwts9OlkKV3_p8E2EgU/edit?resourcekey=&gid=964081015#gid=964081015";
+
+        function handleSecretClick() {
+            secretClicks++;
+            if (secretClicks === 10) {
+                let pass = prompt("Enter the secret code:");
+                if (pass === SECRET_PASS) window.open(GOOGLE_DOCS_URL, "_blank");
+                else alert("Wrong password!");
+                secretClicks = 0;
+            }
+        }
+
+        // تحسين تشغيل الصوت لمنع التقطيع
+        function playMusic(id) {
+            const allAudio = ['m1', 'mQ', 'mS', 'mH'];
+            allAudio.forEach(audioId => {
+                const audio = document.getElementById(audioId);
+                if (audioId === id) {
+                    if (audio.paused) audio.play().catch(()=>{});
+                } else {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
             });
         }
 
+        // تحسين أداء القلوب (المطر)
         function spawnHeart() {
             const container = document.getElementById('hearts-bg');
-            if(!container) return;
             const heart = document.createElement('div');
             heart.className = 'heart-css';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            const duration = Math.random() * 3 + 4;
+            heart.style.animationDuration = duration + 's';
             container.appendChild(heart);
-            setTimeout(() => heart.remove(), 7000);
+            // حذف القلب فور انتهاء الانيميشن لتوفير الرام
+            setTimeout(() => heart.remove(), duration * 1000);
         }
-        let heartInterval = setInterval(spawnHeart, 350);
-
-        setTimeout(() => showLayer('headphone-layer'), 4000);
+        setInterval(spawnHeart, 500);
 
         function showLayer(id) {
             document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         }
 
-        function finalizeIntro() { 
-            stopAllMusic();
-            document.getElementById('m1').play().catch(()=>{}); 
-            showLayer('page1'); 
-        } 
+        function finalizeIntro() { playMusic('m1'); showLayer('page1'); }
         
-        function goToQuestion() { 
-            stopAllMusic();
-            document.getElementById('mQ').play().catch(()=>{}); 
-            showLayer('page4'); 
-        }
+        // ميزة: الموسيقى m1 تظل شغالة في صفحة السؤال
+        function goToQuestion() { showLayer('page4'); }
 
         let noClicks = 0;
         let yesScale = 1;
@@ -162,54 +169,46 @@
             const noBtn = document.getElementById('no');
             const yesBtn = document.getElementById('yes');
 
-            if (noClicks <= 3) {
-                // تكبير زر YES
-                yesScale += 0.6; // مقدار التكبير في كل مرة
+            if (noClicks <= 5) {
+                // تبديل الموسيقى لـ mQ عند أول محاولة رفض
+                if (noClicks === 1) playMusic('mQ');
+
+                yesScale += 1.2;
                 yesBtn.style.transform = `scale(${yesScale})`;
-
-                // تحريك زر NO في مكان عشوائي بعيد عن YES
                 noBtn.style.position = 'fixed';
-                let x = Math.random() * (window.innerWidth - 150);
-                let y = Math.random() * (window.innerHeight - 150);
-                
-                // التأكد إنه ميطلعش برا الشاشة أو يغطي النص
-                noBtn.style.left = Math.max(10, Math.min(x, window.innerWidth - 120)) + 'px';
-                noBtn.style.top = Math.max(10, Math.min(y, window.innerHeight - 80)) + 'px';
+                noBtn.style.left = (Math.random() * 70 + 15) + 'vw';
+                noBtn.style.top = (Math.random() * 70 + 15) + 'vh';
 
-                if(noClicks === 3) { 
-                    noBtn.style.background = "#b71c1c"; 
-                    noBtn.innerText = "Are you sure"; 
+                if (noClicks === 3) {
+                    noBtn.style.background = "#b71c1c";
+                    noBtn.innerText = "Are you sure?";
                 }
-            } else {
-                // بدء المسار الحزين وإيقاف الموسيقى
-                document.getElementById('hearts-bg').style.opacity = "0";
-                stopAllMusic();
-                document.getElementById('mS').play().catch(()=>{});
-                showLayer('sad1');
-                for(let i=2; i<=7; i++) setTimeout(() => showLayer('sad'+i), (i-1)*3500);
-                setTimeout(() => showLayer('last-chance'), 24500);
+
+                if (noClicks === 5) {
+                    playMusic('mS');
+                    document.getElementById('hearts-bg').style.opacity = "0";
+                    showLayer('sad1');
+                    // عرض السلايدات بالترتيب
+                    for(let i=2; i<=7; i++) {
+                        setTimeout(() => showLayer('sad'+i), (i-1)*3500);
+                    }
+                    setTimeout(() => showLayer('last-chance'), 24500);
+                }
             }
         }
 
         function resetToChoice() {
             document.getElementById('hearts-bg').style.opacity = "1";
             document.getElementById('no').style.display = 'none';
-            yesScale = 1.8; // حجم ثابت وكبير لـ YES في الفرصة الأخيرة
+            yesScale = 2.5;
             document.getElementById('yes').style.transform = `scale(${yesScale})`;
-            stopAllMusic();
-            document.getElementById('mQ').play().catch(()=>{});
+            playMusic('mQ');
             showLayer('page4');
         }
 
-        let isTyping = false;
         function yesClicked() {
-            if (isTyping) return;
-            isTyping = true;
-            stopAllMusic();
-            document.getElementById('mH').play().catch(()=>{});
+            playMusic('mH');
             showLayer('yes1');
-            setTimeout(() => showLayer('yes2'), 2500);
-            setTimeout(() => showLayer('yes3'), 5000);
             setTimeout(() => {
                 showLayer('page-final');
                 let txt = "yo shawty i am literally shaking while typing this i cant even describe how i feel right now you just made me the happiest person ever having you by my side is the only thing i ever wanted you are not just a crush you are my whole world my safe place and the only person i can be myself around i promise to always be there for you and treat you like you deserve my heart is all yours forever let's start our own story from now on";
@@ -217,7 +216,7 @@
                 let target = document.getElementById('typewriter');
                 function type() { if(i < txt.length) { target.innerHTML += txt.charAt(i); i++; setTimeout(type, 45); } }
                 type();
-            }, 7500);
+            }, 3000);
         }
     </script>
 </body>
