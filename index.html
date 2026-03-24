@@ -47,10 +47,18 @@
         .sad-text { font-size: clamp(1.1rem, 5vw, 1.8rem); font-style: italic; max-width: 80%; }
         .essay-container { max-width: 90%; width: 650px; background: rgba(0,0,0,0.85); padding: 35px; border-radius: 15px; position: relative; }
 
-        button { padding: 12px 35px; font-size: 1rem; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; transition: 0.4s; }
+        /* تعديلات الزراير */
+        button { 
+            padding: 12px 35px; font-size: 1rem; border-radius: 50px; border: none; 
+            cursor: pointer; font-weight: bold; transition: transform 0.3s ease, background 0.4s; 
+            z-index: 50;
+        }
+        /* تأثير الماوس يكبر ويصغر */
+        button:hover { transform: scale(1.15); }
+
         .btn-ready { background: white; color: black; }
         .btn-next { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.5); }
-        #yes { background: #e91e63; color: white; }
+        #yes { background: #e91e63; color: white; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #no { background: #455a64; color: white; }
 
         .signature-font { font-family: 'UnifrakturMaguntia', serif; font-size: 1.1rem; color: #ff758c; position: absolute; bottom: 15px; right: 25px; }
@@ -69,7 +77,10 @@
 
     <div id="page4" class="layer main-bg">
         <h1 style="margin-bottom: 30px;">Would you be my Valentine</h1>
-        <div style="display:flex; gap: 20px;"><button id="yes" onclick="yesClicked()">YES</button><button id="no" onclick="handleNo()">NO</button></div>
+        <div style="display:flex; gap: 20px; align-items: center; justify-content: center; min-height: 200px; width: 100%;">
+            <button id="yes" onclick="yesClicked()">YES</button>
+            <button id="no" onclick="handleNo()">NO</button>
+        </div>
     </div>
 
     <div id="sad1" class="layer" style="background:black;"><div class="sad-text">I really loved u so much</div></div>
@@ -104,8 +115,17 @@
     <audio id="mH" loop><source src="happy.mp3"></audio>
 
     <script>
+        // وظيفة لإيقاف كل الأغاني
+        function stopAllMusic() {
+            document.querySelectorAll('audio').forEach(a => {
+                a.pause();
+                a.currentTime = 0;
+            });
+        }
+
         function spawnHeart() {
             const container = document.getElementById('hearts-bg');
+            if(!container) return;
             const heart = document.createElement('div');
             heart.className = 'heart-css';
             heart.style.left = Math.random() * 100 + 'vw';
@@ -123,27 +143,47 @@
         }
 
         function finalizeIntro() { 
+            stopAllMusic();
             document.getElementById('m1').play().catch(()=>{}); 
             showLayer('page1'); 
         } 
         
         function goToQuestion() { 
-     document.getElementById('mQ').play().catch(()=>{}); 
-    showLayer('page4'); 
-}
+            stopAllMusic();
+            document.getElementById('mQ').play().catch(()=>{}); 
+            showLayer('page4'); 
+        }
 
         let noClicks = 0;
+        let yesScale = 1;
+
         function handleNo() {
             noClicks++;
             const noBtn = document.getElementById('no');
+            const yesBtn = document.getElementById('yes');
+
             if (noClicks <= 3) {
+                // تكبير زر YES
+                yesScale += 0.6; // مقدار التكبير في كل مرة
+                yesBtn.style.transform = `scale(${yesScale})`;
+
+                // تحريك زر NO في مكان عشوائي بعيد عن YES
                 noBtn.style.position = 'fixed';
-                noBtn.style.left = Math.random() * 70 + 10 + 'vw';
-                noBtn.style.top = Math.random() * 70 + 10 + 'vh';
-                if(noClicks === 3) { noBtn.style.background = "#b71c1c"; noBtn.innerText = "Are you sure"; }
+                let x = Math.random() * (window.innerWidth - 150);
+                let y = Math.random() * (window.innerHeight - 150);
+                
+                // التأكد إنه ميطلعش برا الشاشة أو يغطي النص
+                noBtn.style.left = Math.max(10, Math.min(x, window.innerWidth - 120)) + 'px';
+                noBtn.style.top = Math.max(10, Math.min(y, window.innerHeight - 80)) + 'px';
+
+                if(noClicks === 3) { 
+                    noBtn.style.background = "#b71c1c"; 
+                    noBtn.innerText = "Are you sure"; 
+                }
             } else {
+                // بدء المسار الحزين وإيقاف الموسيقى
                 document.getElementById('hearts-bg').style.opacity = "0";
-                document.getElementById('mQ').pause();
+                stopAllMusic();
                 document.getElementById('mS').play().catch(()=>{});
                 showLayer('sad1');
                 for(let i=2; i<=7; i++) setTimeout(() => showLayer('sad'+i), (i-1)*3500);
@@ -154,7 +194,9 @@
         function resetToChoice() {
             document.getElementById('hearts-bg').style.opacity = "1";
             document.getElementById('no').style.display = 'none';
-            document.getElementById('mS').pause();
+            yesScale = 1.8; // حجم ثابت وكبير لـ YES في الفرصة الأخيرة
+            document.getElementById('yes').style.transform = `scale(${yesScale})`;
+            stopAllMusic();
             document.getElementById('mQ').play().catch(()=>{});
             showLayer('page4');
         }
@@ -163,7 +205,7 @@
         function yesClicked() {
             if (isTyping) return;
             isTyping = true;
-            document.querySelectorAll('audio').forEach(a => a.pause());
+            stopAllMusic();
             document.getElementById('mH').play().catch(()=>{});
             showLayer('yes1');
             setTimeout(() => showLayer('yes2'), 2500);
